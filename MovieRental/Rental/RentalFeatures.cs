@@ -11,16 +11,18 @@ namespace MovieRental.Rental
 			_movieRentalDb = movieRentalDb;
 		}
 
-		//TODO: make me async :(
-		public Rental Save(Rental rental)
-		{
-			_movieRentalDb.Rentals.Add(rental);
-			_movieRentalDb.SaveChanges();
-			return rental;
-		}
+        // Async save
+        // Advantage of async is that it frees up the thread to handle other requests while waiting for the database operation to complete.
+        // Or a more obvious improvement, is that it allows the application to display a loading indicator while waiting for the save operation to finish, instead of freezing the UI, making the user scared that the application has crashed.
+        public async Task<Rental> SaveAsync(Rental rental)
+        {
+            _movieRentalDb.Rentals.Add(rental);
+            await _movieRentalDb.SaveChangesAsync();
+            return rental;
+        }
 
-		//TODO: finish this method and create an endpoint for it
-		public IEnumerable<Rental> GetRentalsByCustomerName(string customerName)
+        //TODO: finish this method and create an endpoint for it
+        public IEnumerable<Rental> GetRentalsByCustomerName(string customerName)
 		{
 			return [];
 		}
