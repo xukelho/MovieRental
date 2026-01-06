@@ -23,5 +23,16 @@ namespace MovieRental.Controllers
 	        return Ok(_features.SaveAsync(rental));
         }
 
-	}
+        [HttpGet("by-customer")]
+        public IActionResult GetRentalsByCustomerName([FromQuery] string customerName)
+        {
+            if (string.IsNullOrWhiteSpace(customerName))
+            {
+                return BadRequest("customerName is required.");
+            }
+
+            var rentals = _features.GetRentalsByCustomerName(customerName);
+            return Ok(rentals);
+        }
+    }
 }

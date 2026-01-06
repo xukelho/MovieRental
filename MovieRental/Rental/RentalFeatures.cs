@@ -21,10 +21,20 @@ namespace MovieRental.Rental
             return rental;
         }
 
-        //TODO: finish this method and create an endpoint for it
         public IEnumerable<Rental> GetRentalsByCustomerName(string customerName)
 		{
-			return [];
+			var name = customerName?.Trim();
+			if (string.IsNullOrEmpty(name))
+			{
+				return Enumerable.Empty<Rental>();
+			}
+
+			var lower = name.ToLowerInvariant();
+
+			return _movieRentalDb.Rentals
+				.Include(r => r.Movie)
+				.Where(r => r.CustomerName != null && r.CustomerName.ToLower().Contains(lower))
+				.ToList();
 		}
 
 	}
