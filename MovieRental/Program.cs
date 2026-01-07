@@ -16,6 +16,9 @@ builder.Services.AddScoped<IRentalFeatures, RentalFeatures>();
 builder.Services.AddTransient<IPaymentProvider, PayPalProvider>();
 builder.Services.AddTransient<IPaymentProvider, MbWayProvider>();
 
+// Register factory as scoped so it can safely depend on transient providers and be injected into scoped services.
+builder.Services.AddScoped<IPaymentProviderFactory, PaymentProviderFactory>();
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())

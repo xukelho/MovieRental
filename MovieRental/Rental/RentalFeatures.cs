@@ -11,14 +11,14 @@ namespace MovieRental.Rental
 	public class RentalFeatures : IRentalFeatures
 	{
 		private readonly MovieRentalDbContext _movieRentalDb;
-		private readonly IEnumerable<IPaymentProvider> _paymentProviders;
+		private readonly IPaymentProviderFactory _providerFactory;
 
         const double pricePerDay = 5;//€
 
-        public RentalFeatures(MovieRentalDbContext movieRentalDb, IEnumerable<IPaymentProvider> paymentProviders)
+        public RentalFeatures(MovieRentalDbContext movieRentalDb, IPaymentProviderFactory providerFactory)
 		{
 			_movieRentalDb = movieRentalDb;
-			_paymentProviders = paymentProviders;
+			_providerFactory = providerFactory;
 		}
 
         // Async save
@@ -32,9 +32,8 @@ namespace MovieRental.Rental
 
             var price = rental.DaysRented * pricePerDay;
 
-            var method = rental.PaymentMethod.Trim();
-            var provider = _paymentProviders.FirstOrDefault(p => p.CanHandle(method));
-            if (provider == null)
+            var provider = _providerFactory.GetProvider(rental.PaymentMethod);
+            if (provider is null)
             {
                 throw new InvalidOperationException($"Unsupported payment method: {rental.PaymentMethod}");
             }
@@ -66,5 +65,6 @@ namespace MovieRental.Rental
 				.Where(r => r.Customer != null && r.Customer.Name.ToLower().Contains(lower))
 				.ToList();
 		}
+
 	}
 }
