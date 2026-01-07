@@ -38,6 +38,9 @@ namespace MovieRental.Rental
                 throw new InvalidOperationException($"Unsupported payment method: {rental.PaymentMethod}");
             }
 
+            // As requested by the exercise, if the payment fails, an exception is thrown and the rental is not saved.
+            // However, it is advised to first create a temporary rental record with a "Pending" status, and only mark it as "Completed" after the payment is successful.
+            // With the use of a temp table/record for this purpose, or something similar.
             var paid = await provider.Pay(price);
             if (!paid)
             {
