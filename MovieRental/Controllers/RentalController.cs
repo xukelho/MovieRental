@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using MovieRental.Movie;
 using MovieRental.Rental;
 
 namespace MovieRental.Controllers
