@@ -33,7 +33,8 @@ namespace MovieRental.Rental
 
 			return _movieRentalDb.Rentals
 				.Include(r => r.Movie)
-				.Where(r => r.CustomerName != null && r.CustomerName.ToLower().Contains(lower))
+				.Include(r => r.Customer)
+				.Where(r => r.Customer != null && r.Customer.Name.ToLower().Contains(lower))
 				.ToList();
 		}
 
