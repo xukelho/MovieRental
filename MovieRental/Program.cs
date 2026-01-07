@@ -1,6 +1,6 @@
 using MovieRental.Data;
-using MovieRental.Movie;
 using MovieRental.Rental;
+using MovieRental.PaymentProviders;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +11,10 @@ builder.Services.AddEntityFrameworkSqlite().AddDbContext<MovieRentalDbContext>()
 
 // Use scoped so RentalFeatures can consume the scoped DbContext
 builder.Services.AddScoped<IRentalFeatures, RentalFeatures>();
+
+// Register payment providers — DI will inject all IPaymentProvider implementations
+builder.Services.AddTransient<IPaymentProvider, PayPalProvider>();
+builder.Services.AddTransient<IPaymentProvider, MbWayProvider>();
 
 var app = builder.Build();
 
